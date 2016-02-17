@@ -8,8 +8,8 @@ port = 27017
 client = MongoClient(host, port)
 db = client.assets
 devices = db.httpDevices
-pings = db.locationPings
 current_ping = db.currentLocation
+location_history = db.locationHistory
 
 
 @app.route('/')
@@ -28,20 +28,21 @@ def register_device():
     return str(data), 201
 
 
+# Save a location history of Asset
 @app.route('/api/ping', methods=['POST'])
 def ping_location():
+    json_data = request.get_json()
     data = {
-        'imei': request.json['imei'],
-        'PhoneNumber': request.json['phone'],
-        'latitude': request.json['lat'],
-        'longitude': request.json['lon']
+        "user_id": json_data["Asset"]["UserId"],
+        "location": json_data["location"]
     }
-    pings.insert_one(data)
 
+    location_history.insert_one(data)
     # return jsonify({'data': data}), 201
     return str(data), 201
 
 
+# Save current location of Asset
 @app.route('/api/current', methods=['POST'])
 def ping_current():
     json_data = request.get_json()
