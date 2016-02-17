@@ -9,44 +9,63 @@ client = MongoClient(host, port)
 db = client.assets
 devices = db.httpDevices
 pings = db.locationPings
+current_ping = db.currentLocation
+
 
 @app.route('/')
 def home():
-	return 'Welcome'
-	
-	
+    return 'Welcome'
+
+
 @app.route('/api/register', methods=['POST'])
 def register_device():
-	data = {
-		'imei': request.json['imei'],
-		'PhoneNumber': request.json['phone']
-	}
-	devices.insert_one(data)
-	
-	return str(data), 201
-	
-	
+    data = {
+        'imei': request.json['imei'],
+        'PhoneNumber': request.json['phone']
+    }
+    devices.insert_one(data)
+
+    return str(data), 201
+
+
 @app.route('/api/ping', methods=['POST'])
 def ping_location():
-	data = {
-		'imei': request.json['imei'],
-		'PhoneNumber': request.json['phone'],
-		'latitude': request.json['lat'],
-		'longitude': request.json['lon']
-	}
-	pings.insert_one(data)
-	
-	# return jsonify({'data': data}), 201
-	return str(data), 201
-	
-	
+    data = {
+        'imei': request.json['imei'],
+        'PhoneNumber': request.json['phone'],
+        'latitude': request.json['lat'],
+        'longitude': request.json['lon']
+    }
+    pings.insert_one(data)
+
+    # return jsonify({'data': data}), 201
+    return str(data), 201
+
+
+@app.route('/api/current', methods=['POST'])
+def ping_current():
+    json_data = request.get_json()
+    data = {
+        "user_id": json_data["Asset"]["UserId"],
+        "location": json_data["location"]
+    }
+
+    user_data = current_ping.find_one({"user_id": json_data["Asset"]["UserId"]})
+    if not user_data:
+        current_ping.insert_one(data)
+    else:
+        current_ping.update_one({"user_id": json_data["Asset"]["UserId"]},
+                                {'$set': {"location": json_data["location"]}})
+
+    return str(data), 201
+
+
 @app.route('/api/devices', methods=['GET'])
 def get_devices():
-	device_list = devices.find()
-	
-	return str(device_list)
+    device_list = devices.find()
 
-	
-	
+    return str(device_list)
+
+
 if __name__ == "__main__":
-	app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=True)
