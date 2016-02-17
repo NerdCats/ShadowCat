@@ -1,0 +1,52 @@
+from flask import Flask, request, jsonify
+from pymongo import MongoClient
+
+app = Flask(__name__)
+
+host = 'localhost'
+port = 27017
+client = MongoClient(host, port)
+db = client.assets
+devices = db.httpDevices
+pings = db.locationPings
+
+@app.route('/')
+def home():
+	return 'Welcome'
+	
+	
+@app.route('/api/register', methods=['POST'])
+def register_device():
+	data = {
+		'imei': request.json['imei'],
+		'PhoneNumber': request.json['phone']
+	}
+	devices.insert_one(data)
+	
+	return str(data), 201
+	
+	
+@app.route('/api/ping', methods=['POST'])
+def ping_location():
+	data = {
+		'imei': request.json['imei'],
+		'PhoneNumber': request.json['phone'],
+		'latitude': request.json['lat'],
+		'longitude': request.json['lon']
+	}
+	pings.insert_one(data)
+	
+	# return jsonify({'data': data}), 201
+	return str(data), 201
+	
+	
+@app.route('/api/devices', methods=['GET'])
+def get_devices():
+	device_list = devices.find()
+	
+	return str(device_list)
+
+	
+	
+if __name__ == "__main__":
+	app.run(host='0.0.0.0', debug=True)
