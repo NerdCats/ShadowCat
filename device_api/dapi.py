@@ -1,15 +1,15 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from pymongo import MongoClient
 
 app = Flask(__name__)
 
-host = 'localhost'
+host = 'taskcatmongo.cloudapp.net'
 port = 27017
 client = MongoClient(host, port)
-db = client.assets
-devices = db.httpDevices
-current_ping = db.currentLocation
-location_history = db.locationHistory
+db = client.shadowcat                   # Database: shadowcat
+devices = db.httpDevices                # Collection: httpDevice
+current_ping = db.currentLocation       # Collection: currentLocation
+location_history = db.locationHistory   # Collection: locationHistory
 
 
 @app.route('/')
@@ -28,42 +28,63 @@ def register_device():
     return str(data), 201
 
 
-# Save a location history of Asset
+# Save location history of the Asset
 @app.route('/api/ping', methods=['POST'])
 def ping_location():
     json_data = request.get_json()
     data = {
-        "user_id": json_data["Asset"]["UserId"],
+        "user_id": json_data["user_id"],
+        "name": json_data["name"],
         "location": json_data["location"]
     }
 
     location_history.insert_one(data)
+    user_data = current_ping.find_one({"user_id": json_data["user_id"]})
+    if not user_data:
+        current_ping.insert_one(data)
+    else:
+        current_ping.update_one({"user_id": json_data["user_id"]},
+                                {'$set': {"location": json_data["location"]}})
     # return jsonify({'data': data}), 201
     return str(data), 201
 
 
 # Save current location of Asset
-@app.route('/api/current', methods=['POST'])
+@app.route('/api/current', methods=['POST', 'GET'])
 def ping_current():
-    json_data = request.get_json()
-    data = {
-        "user_id": json_data["Asset"]["UserId"],
-        "location": json_data["location"]
-    }
+    if request.method == 'GET':
+        cursor = current_ping.find()
+        current_locations = []
+        for document in cursor:
+            current_locations.append(document)
 
-    user_data = current_ping.find_one({"user_id": json_data["Asset"]["UserId"]})
-    if not user_data:
-        current_ping.insert_one(data)
+        return str(current_locations)
+
+    # FIX: maybe unnecessary
     else:
-        current_ping.update_one({"user_id": json_data["Asset"]["UserId"]},
-                                {'$set': {"location": json_data["location"]}})
+        json_data = request.get_json()
+        data = {
+            "user_id": json_data["user_id"],
+            "name": json_data["name"],
+            "location": json_data["location"]
+        }
 
-    return str(data), 201
+        user_data = current_ping.find_one({"user_id": json_data["user_id"]})
+        if not user_data:
+            current_ping.insert_one(data)
+        else:
+            current_ping.update_one({"user_id": json_data["user_id"]},
+                                    {'$set': {"location": json_data["location"]}})
+
+        return str(data), 201
 
 
 @app.route('/api/devices', methods=['GET'])
 def get_devices():
-    device_list = devices.find()
+    cursor = devices.find()
+    device_list = []
+    for document in cursor:
+        device_list.append(document)
 
     return str(device_list)
 
