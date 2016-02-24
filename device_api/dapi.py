@@ -1,5 +1,7 @@
+import json
 from flask import Flask, request
 from pymongo import MongoClient
+from bson.json_util import dumps
 
 app = Flask(__name__)
 
@@ -25,7 +27,7 @@ def register_device():
     }
     devices.insert_one(data)
 
-    return str(data), 201
+    return dumps(data), 201
 
 
 # Save location history of the Asset
@@ -46,7 +48,7 @@ def ping_location():
         current_ping.update_one({"user_id": json_data["user_id"]},
                                 {'$set': {"location": json_data["location"]}})
     # return jsonify({'data': data}), 201
-    return str(data), 201
+    return dumps(data), 201
 
 
 # Save current location of Asset
@@ -58,7 +60,7 @@ def ping_current():
         for document in cursor:
             current_locations.append(document)
 
-        return str(current_locations)
+        return dumps(current_locations)
 
     # FIX: maybe unnecessary
     else:
@@ -76,7 +78,7 @@ def ping_current():
             current_ping.update_one({"user_id": json_data["user_id"]},
                                     {'$set': {"location": json_data["location"]}})
 
-        return str(data), 201
+        return dumps(data), 201
 
 
 @app.route('/api/devices', methods=['GET'])
@@ -86,7 +88,7 @@ def get_devices():
     for document in cursor:
         device_list.append(document)
 
-    return str(device_list)
+    return dumps(device_list)
 
 
 if __name__ == "__main__":
