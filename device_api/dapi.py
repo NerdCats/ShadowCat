@@ -1,7 +1,7 @@
-import json
 from flask import Flask, request
 from pymongo import MongoClient
 from bson.json_util import dumps
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
@@ -37,16 +37,19 @@ def ping_location():
     data = {
         "user_id": json_data["user_id"],
         "name": json_data["name"],
-        "location": json_data["location"]
+        "location": json_data["location"],
+        "timestamp": datetime.utcnow() + timedelta(hours=6)
     }
-
     location_history.insert_one(data)
+
     user_data = current_ping.find_one({"user_id": json_data["user_id"]})
     if not user_data:
         current_ping.insert_one(data)
     else:
         current_ping.update_one({"user_id": json_data["user_id"]},
-                                {'$set': {"location": json_data["location"]}})
+                                {'$set': {"location": json_data["location"],
+                                          "timestamp": datetime.utcnow() + timedelta(hours=6)}
+                                 })
     # return jsonify({'data': data}), 201
     return dumps(data), 201
 
