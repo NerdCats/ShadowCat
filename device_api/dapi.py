@@ -2,16 +2,17 @@ from flask import Flask, request
 from pymongo import MongoClient
 from bson.json_util import dumps
 from datetime import datetime, timedelta
+from models import Users, Device
 
 app = Flask(__name__)
 
 host = 'taskcatmongo.cloudapp.net'
 port = 27017
 client = MongoClient(host, port)
-db = client.shadowcat                   # Database: shadowcat
-devices = db.httpDevices                # Collection: httpDevice
-current_ping = db.currentLocation       # Collection: currentLocation
-location_history = db.locationHistory   # Collection: locationHistory
+db = client.shadowcat                       # Database: shadowcat
+devices = db.httpDevices                    # Collection: httpDevice
+current_ping = db.currentLocation           # Collection: currentLocation
+location_history = db.locationHistory       # Collection: locationHistory
 
 
 @app.route('/')
@@ -21,37 +22,36 @@ def home():
 
 @app.route('/api/register', methods=['POST'])
 def register_device():
-    data = {
-        'imei': request.json['imei'],
-        'PhoneNumber': request.json['phone']
-    }
-    devices.insert_one(data)
-
-    return dumps(data), 201
+    json_data = request.get_json()
+    data = Device(
+        json_data["imei"],
+        json_data["phone"]
+    )
+    devices.insert_one(data.__dict__)
+    return dumps(data.__dict__), 201
 
 
 # Save location history of the Asset
 @app.route('/api/ping', methods=['POST'])
 def ping_location():
     json_data = request.get_json()
-    data = {
-        "user_id": json_data["user_id"],
-        "name": json_data["name"],
-        "location": json_data["location"],
-        "timestamp": datetime.utcnow() + timedelta(hours=6)
-    }
-    location_history.insert_one(data)
+    data = Users(
+        json_data["user_id"],
+        json_data["name"],
+        json_data["location"]
+    )
+    location_history.insert_one(data.__dict__)
 
     user_data = current_ping.find_one({"user_id": json_data["user_id"]})
     if not user_data:
-        current_ping.insert_one(data)
+        current_ping.insert_one(data.__dict__)
     else:
         current_ping.update_one({"user_id": json_data["user_id"]},
                                 {'$set': {"location": json_data["location"],
                                           "timestamp": datetime.utcnow() + timedelta(hours=6)}
                                  })
     # return jsonify({'data': data}), 201
-    return dumps(data), 201
+    return dumps(data.__dict__), 201
 
 
 # Save current location of Asset
@@ -95,4 +95,7 @@ def get_devices():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
+    app.run(
+        host='0.0.0.0',
+        debug=True
+    )
