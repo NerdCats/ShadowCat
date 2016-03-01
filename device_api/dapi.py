@@ -26,7 +26,7 @@ def register_device():
     data = User(
         json_data["user_id"],
         json_data["name"],
-        json_data["location"],
+        json_data["point"],
         json_data["device"]
     )
     devices.insert_one(data.__dict__)
@@ -40,7 +40,7 @@ def ping_location():
     data = User(
         json_data["user_id"],
         json_data["name"],
-        json_data["location"]
+        json_data["point"]
     )
     location_history.insert_one(data.__dict__)
 
@@ -49,7 +49,7 @@ def ping_location():
         current_ping.insert_one(data.__dict__)
     else:
         current_ping.update_one({"user_id": json_data["user_id"]},
-                                {'$set': {"location": json_data["location"],
+                                {'$set': {"point": json_data["point"],
                                           "timestamp": datetime.utcnow() + timedelta(hours=6)}
                                  })
     # return jsonify({'data': data}), 201
@@ -73,7 +73,7 @@ def ping_current():
         data = User(
             json_data["user_id"],
             json_data["name"],
-            json_data["location"]
+            json_data["point"]
         )
 
         user_data = current_ping.find_one({"user_id": json_data["user_id"]})
@@ -81,7 +81,7 @@ def ping_current():
             current_ping.insert_one(data)
         else:
             current_ping.update_one({"user_id": json_data["user_id"]},
-                                    {'$set': {"location": json_data["location"]}})
+                                    {'$set': {"point": json_data["point"]}})
 
         return dumps(data), 201
 
