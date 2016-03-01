@@ -2,7 +2,7 @@ from flask import Flask, request
 from pymongo import MongoClient
 from bson.json_util import dumps
 from datetime import datetime, timedelta
-from models import Users, Device
+from models import User, Device
 
 app = Flask(__name__)
 
@@ -17,15 +17,17 @@ location_history = db.locationHistory       # Collection: locationHistory
 
 @app.route('/')
 def home():
-    return 'Welcome'
+    return 'Welcome to ShadowCat'
 
 
 @app.route('/api/register', methods=['POST'])
 def register_device():
     json_data = request.get_json()
-    data = Device(
-        json_data["imei"],
-        json_data["phone"]
+    data = User(
+        json_data["user_id"],
+        json_data["name"],
+        json_data["location"],
+        json_data["device"]
     )
     devices.insert_one(data.__dict__)
     return dumps(data.__dict__), 201
@@ -35,7 +37,7 @@ def register_device():
 @app.route('/api/ping', methods=['POST'])
 def ping_location():
     json_data = request.get_json()
-    data = Users(
+    data = User(
         json_data["user_id"],
         json_data["name"],
         json_data["location"]
@@ -68,11 +70,11 @@ def ping_current():
     # FIX: maybe unnecessary
     else:
         json_data = request.get_json()
-        data = {
-            "user_id": json_data["user_id"],
-            "name": json_data["name"],
-            "location": json_data["location"]
-        }
+        data = User(
+            json_data["user_id"],
+            json_data["name"],
+            json_data["location"]
+        )
 
         user_data = current_ping.find_one({"user_id": json_data["user_id"]})
         if not user_data:
