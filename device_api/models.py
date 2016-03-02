@@ -15,10 +15,7 @@ class User(object):
             point["coordinates"][0],
             point["coordinates"][1]
         ))
-        self.device = Device(
-            device["imei"],
-            device["phone_number"]
-        )
+        self.device = device
         self.timestamp = timestamp
 
 
