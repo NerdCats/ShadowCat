@@ -1,24 +1,29 @@
 from flask import Flask, request
-# from pymongo import MongoClient
+from pymongo import MongoClient
 from bson.json_util import dumps
 from datetime import datetime, timedelta
 from models import User
 
-# host = 'taskcatmongo.cloudapp.net'
-# port = 27017
-# client = MongoClient(host, port)
-# db = client.shadowcat                           # Database: shadowcat
-# coll_devices = db.httpDevices                   # Collection: httpDevice
-# coll_current_ping = db.currentLocation          # Collection: currentLocation
-# coll_location_history = db.locationHistory      # Collection: locationHistory
+host = 'taskcatmongo.cloudapp.net'
+port = 27017
+client = MongoClient(host, port)
+db = client.shadowcat  # Database: shadowcat
+coll_devices = db.httpDevices  # Collection: httpDevice
+coll_current_ping = db.currentLocation  # Collection: currentLocation
+coll_location_history = db.locationHistory  # Collection: locationHistory
 
-# print client, '\n'
-# print db, '\n'
-# print coll_location_history, '\n'
-# print coll_current_ping, '\n'
-# print coll_devices, '\n'
+print client
+print db
+print coll_location_history
+print coll_current_ping
+print coll_devices
+
+print '-' * 100
 
 app = Flask(__name__)
+
+print "Json_as_ascii:", app.config['JSON_AS_ASCII']
+print "Debug:", app.config['DEBUG']
 
 
 @app.route('/')

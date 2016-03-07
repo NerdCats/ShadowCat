@@ -2,7 +2,8 @@ from pymongo import MongoClient
 
 # Server configurations
 DEBUG = True
-SERVER_NAME = '0.0.0.0:7000'
+# SERVER_NAME doesn't work on localhost
+# SERVER_NAME = '0.0.0.0:7000'
 JSON_AS_ASCII = False
 
 # Database configurations
