@@ -17,6 +17,9 @@ COLL_HTTP_DEVICES = 'httpDevices'
 COLL_PINGS = 'pings'
 COLL_HISTORY = 'history'
 
+# the following shows the collection name as
+# COLL_HTTP_DEVICES, ... etc, if that's the
+# collection's name it needs to be fixed
 DB_COLL_DEVICES = DB_DATABASE.COLL_HTTP_DEVICES
 DB_COLL_PINGS = DB_DATABASE.COLL_PINGS
 DB_COLL_HISTORY = DB_DATABASE.COLL_HISTORY

@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from bson.json_util import dumps
 from datetime import datetime, timedelta
 from models import User
+from app import app
 
 host = 'taskcatmongo.cloudapp.net'
 port = 27017
@@ -12,18 +13,15 @@ coll_devices = db.httpDevices  # Collection: httpDevice
 coll_current_ping = db.currentLocation  # Collection: currentLocation
 coll_location_history = db.locationHistory  # Collection: locationHistory
 
-print client
-print db
-print coll_location_history
-print coll_current_ping
-print coll_devices
-
-print '-' * 100
-
-app = Flask(__name__)
-
+# For medical purposes only
 print "Json_as_ascii:", app.config['JSON_AS_ASCII']
 print "Debug:", app.config['DEBUG']
+print 'config[\'DB_HOST\']:', app.config['DB_HOST']
+print 'DB_PORT:', app.config['DB_PORT']
+print 'DB_CLIENT:', app.config['DB_CLIENT']
+print 'DB_NAME:', app.config['DB_NAME']
+print 'DB_DATABASE:', app.config['DB_DATABASE']
+print 'DB_COLL_DEVICES:', app.config['DB_COLL_DEVICES']
 
 
 @app.route('/')
@@ -105,8 +103,3 @@ def get_devices():
         device_list.append(document)
 
     return dumps(device_list)
-
-
-if __name__ == "__main__":
-    app.config.from_object('config')
-    app.run()
