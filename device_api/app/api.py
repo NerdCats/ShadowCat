@@ -1,17 +1,8 @@
-from flask import Flask, request
-from pymongo import MongoClient
+from flask import request
 from bson.json_util import dumps
 from datetime import datetime, timedelta
 from models import User
 from app import app
-
-host = 'taskcatmongo.cloudapp.net'
-port = 27017
-client = MongoClient(host, port)
-db = client.shadowcat  # Database: shadowcat
-coll_devices = db.httpDevices  # Collection: httpDevice
-coll_current_ping = db.currentLocation  # Collection: currentLocation
-coll_location_history = db.locationHistory  # Collection: locationHistory
 
 # For medical purposes only
 print "Json_as_ascii:", app.config['JSON_AS_ASCII']
@@ -77,6 +68,7 @@ def ping_current():
         return dumps(current_locations)
 
     # FIX: maybe unnecessary
+    # The POST request
     else:
         json_data = request.get_json()
         data = User(
@@ -103,3 +95,6 @@ def get_devices():
         device_list.append(document)
 
     return dumps(device_list)
+
+
+app.run()
