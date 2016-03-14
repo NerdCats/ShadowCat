@@ -1,25 +1,29 @@
 import optparse
 
 
-def flaskrun(app, default_host='127.0.0.1',
-             default_port=5000):
+def flaskrun(app, host=None, port=None):
     parser = optparse.OptionParser()
     parser.add_option('-H', '--host',
                       help='Hostname for the app' +
-                           '[default %s]' % default_host,
-                      default=default_host)
+                           '[default %s]' % host,
+                      default=host)
     parser.add_option('-P', '--port',
                       help='Port for the app' +
-                           '[default %s]' % default_port,
-                      default=default_port)
+                           '[default %s]' % port,
+                      default=port)
     parser.add_option('-D', '--debug',
                       action='store_true', dest='debug',
                       help=optparse.SUPPRESS_HELP)
 
     (options, args) = parser.parse_args()
 
-    app.run(
-        debug=options.debug,
-        host=options.host,
-        port=int(options.port)
-    )
+    if options.host is None or options.port is None:
+        app.run(
+            debug=options.debug
+        )
+    else:
+        app.run(
+            debug=options.debug,
+            host=options.host,
+            port=int(options.port)
+        )
