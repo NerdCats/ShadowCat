@@ -3,6 +3,7 @@ from bson.json_util import dumps
 from datetime import datetime, timedelta
 from models import User
 from app import app
+from flaskrun import flaskrun
 
 # For medical purposes only
 print "Json_as_ascii:", app.config['JSON_AS_ASCII']
@@ -97,4 +98,4 @@ def get_devices():
     return dumps(device_list)
 
 
-app.run()
+flaskrun(app)
