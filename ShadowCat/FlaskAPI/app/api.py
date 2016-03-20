@@ -2,8 +2,8 @@ from flask import request
 from bson.json_util import dumps
 from datetime import datetime, timedelta
 from models import User
-from app import app
-from flaskrun import flaskrun
+from FlaskAPI.app import app
+from FlaskAPI.flaskrun import flaskrun
 
 # For medical purposes only
 print "Json_as_ascii:", app.config['JSON_AS_ASCII']
