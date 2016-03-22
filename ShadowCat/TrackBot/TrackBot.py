@@ -7,7 +7,7 @@ import time
 from TCPServer.client import TCPClient
 
 
-class TrackBot:
+class TrackBot(object):
     def __init__(self, host, port, buffer_size, imei=""):
         self.client = TCPClient(host, port, buffer_size)
         self.imei = imei
@@ -23,7 +23,8 @@ class TrackBot:
         self.client.send_message(message)
         time.sleep(5)
 
-    def get_random_location(self):
+    @staticmethod
+    def get_random_location():
         return Point((
             random.uniform(20, 26),
             random.uniform(88, 92)
