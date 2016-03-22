@@ -12,4 +12,4 @@ tracker = TrackBot(
 )
 
 while True:
-    tracker.ping_server()
+    tracker.ping_tcp_random()
