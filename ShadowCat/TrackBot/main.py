@@ -1,7 +1,6 @@
-from TrackBot import TrackBot
+from trackbot import TrackBot
 from load_config import load_config
 
-# Load configurations
 config = load_config('config.json')
 
 imei = "442283480893012"

@@ -1,10 +1,8 @@
-from audioop import mul
-
-from geojson import Point
 import random
 import time
+from geojson import Point
 
-from TCPServer.client import TCPClient
+from trackbot.client import TCPClient
 
 
 class TrackBot(object):
@@ -31,7 +29,7 @@ class TrackBot(object):
         ))
 
     def ping_random(self):
-        if self.location['coordinates'][0] == 0\
+        if self.location['coordinates'][0] == 0 \
                 and self.location['coordinates'][1] == 0:
             self.location = self.get_random_location()
 

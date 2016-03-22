@@ -22,6 +22,3 @@ class TCPServer:
                 print address, ":", data
                 conn.sendall(data)
             conn.close()
-
-
-# FIXME: should be somewhere else, looks ugly
