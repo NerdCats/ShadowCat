@@ -11,5 +11,8 @@ tracker = TrackBot(
     imei
 )
 
+# while True:
+#     tracker.ping_tcp_random()
+
 while True:
-    tracker.ping_tcp_random()
+    print tracker.ping_api_random('123', 'Shaphil')
