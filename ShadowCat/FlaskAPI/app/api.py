@@ -15,87 +15,51 @@ print 'DB_NAME:', app.config['DB_NAME']
 print 'DB_DATABASE:', app.config['DB_DATABASE']
 print 'DB_COLL_DEVICES:', app.config['DB_COLL_DEVICES']
 
+coll_history = app.config['DB_COLL_HISTORY']
+coll_pings = app.config['DB_COLL_PINGS']
+
 
 @app.route('/')
 def home():
     return 'Welcome to ShadowCat'
 
 
-@app.route('/api/register', methods=['POST'])
-def register_device():
-    json_data = request.get_json()
-    data = User(
-        json_data["user_id"],
-        json_data["name"],
-        json_data["point"],
-        json_data["device"]
-    )
-    app.config['DB_COLL_DEVICES'].insert_one(data.__dict__)
-    return dumps(data.__dict__), 201
-
-
-# Save location history of the Asset
 @app.route('/api/ping', methods=['POST'])
 def ping_location():
     json_data = request.get_json()
     data = User(
-        json_data["user_id"],
-        json_data["name"],
+        json_data["asset_id"],
         json_data["point"]
     )
-    app.config['DB_COLL_HISTORY'].insert_one(data.__dict__)
+    coll_history.insert_one(data.__dict__)
 
-    user_data = app.config['DB_COLL_PINGS'].find_one({"user_id": json_data["user_id"]})
+    user_data = coll_pings.find_one({"asset_id": json_data["asset_id"]})
     if not user_data:
-        app.config['DB_COLL_PINGS'].insert_one(data.__dict__)
+        coll_pings.insert_one(data.__dict__)
     else:
-        app.config['DB_COLL_PINGS'].update_one({"user_id": json_data["user_id"]},
-                                               {'$set': {"point": json_data["point"],
-                                                         "timestamp": datetime.utcnow() + timedelta(hours=6)}
-                                                })
-    # return jsonify({'data': data}), 201
+        coll_pings.update_one({"asset_id": json_data["asset_id"]},
+                              {'$set': {"point": json_data["point"],
+                                        "timestamp": datetime.utcnow() + timedelta(hours=6)}
+                               })
     return dumps(data.__dict__), 201
 
 
-# Save current location of Asset
-@app.route('/api/current', methods=['POST', 'GET'])
-def ping_current():
-    if request.method == 'GET':
-        cursor = app.config['DB_COLL_PINGS'].find()
-        current_locations = []
-        for document in cursor:
-            current_locations.append(document)
-
-        return dumps(current_locations)
-
-    # FIX: maybe unnecessary
-    # The POST request
+@app.route('/api/location/<asset_id>', methods=['GET'])
+def get_location(asset_id):
+    user_data = coll_pings.find_one({'asset_id': asset_id})
+    if not user_data:
+        return 'Not found!', 404
     else:
-        json_data = request.get_json()
-        data = User(
-            json_data["user_id"],
-            json_data["name"],
-            json_data["point"]
-        )
-
-        user_data = app.config['DB_COLL_PINGS'].find_one({"user_id": json_data["user_id"]})
-        if not user_data:
-            app.config['DB_COLL_PINGS'].insert_one(data)
-        else:
-            app.config['DB_COLL_PINGS'].update_one({"user_id": json_data["user_id"]},
-                                                   {'$set': {"point": json_data["point"]}})
-
-        return dumps(data), 201
+        return dumps(user_data)
 
 
-@app.route('/api/devices', methods=['GET'])
-def get_devices():
-    cursor = app.config['DB_COLL_DEVICES'].find()
-    device_list = []
+@app.route('/api/history/<asset_id>', methods=['GET'])
+def get_history(asset_id):
+    cursor = coll_history.find({'asset_id': asset_id})
+    history = []
     for document in cursor:
-        device_list.append(document)
-
-    return dumps(device_list)
+        history.append(document)
+    return dumps(history)
 
 
 flaskrun(app)
