@@ -1,27 +1,18 @@
+from FlaskCat import app
+from models import User
+
 from flask import request
 from bson.json_util import dumps
 from datetime import datetime, timedelta
-from models import User
-from FlaskAPI.app import app
-from FlaskAPI.flaskrun import flaskrun
-
-# For medical purposes only
-print "Json_as_ascii:", app.config['JSON_AS_ASCII']
-print "Debug:", app.config['DEBUG']
-print 'config[\'DB_HOST\']:', app.config['DB_HOST']
-print 'DB_PORT:', app.config['DB_PORT']
-print 'DB_CLIENT:', app.config['DB_CLIENT']
-print 'DB_NAME:', app.config['DB_NAME']
-print 'DB_DATABASE:', app.config['DB_DATABASE']
-print 'DB_COLL_DEVICES:', app.config['DB_COLL_DEVICES']
 
 coll_history = app.config['DB_COLL_HISTORY']
 coll_pings = app.config['DB_COLL_PINGS']
 
 
 @app.route('/')
-def home():
-    return 'Welcome to ShadowCat'
+@app.route('/api')
+def api_home():
+    return '.:: Welcome to ShadowCat API ::.'
 
 
 @app.route('/api/ping', methods=['POST'])
@@ -60,6 +51,3 @@ def get_history(asset_id):
     for document in cursor:
         history.append(document)
     return dumps(history)
-
-
-flaskrun(app)
