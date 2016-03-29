@@ -4,6 +4,7 @@ from models import User
 from flask import request
 from bson.json_util import dumps
 from datetime import datetime, timedelta
+from geojson import Point
 
 coll_history = app.config['DB_COLL_HISTORY']
 coll_pings = app.config['DB_COLL_PINGS']
@@ -18,6 +19,11 @@ def api_home():
 @app.route('/api/ping', methods=['POST'])
 def ping_location():
     json_data = request.get_json()
+    if 'asset_id' not in json_data:
+        return 'asset_id not provided'
+    elif 'point' not in json_data:
+        return 'point not provided'
+
     data = User(
         json_data["asset_id"],
         json_data["point"]
