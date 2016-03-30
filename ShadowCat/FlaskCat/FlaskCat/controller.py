@@ -5,6 +5,7 @@ from validators import validate_input
 from flask import request
 from bson.json_util import dumps
 from datetime import datetime, timedelta
+import pymongo
 
 coll_history = app.config['DB_COLL_HISTORY']
 coll_pings = app.config['DB_COLL_PINGS']
@@ -50,8 +51,13 @@ def get_location(asset_id):
 
 
 @app.route('/api/history/<asset_id>', methods=['GET'])
-def get_history(asset_id):
-    cursor = coll_history.find({'asset_id': asset_id})
+@app.route('/api/history/<asset_id>/<document_limit>', methods=['GET'])
+def get_history(asset_id, document_limit=10):
+    cursor = coll_history.find(
+        {'asset_id': asset_id}
+    ).sort(
+        "timestamp", pymongo.DESCENDING
+    ).limit(int(document_limit))
     history = []
     for document in cursor:
         history.append(document)
