@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from geojson import Point
 
 
@@ -7,7 +7,7 @@ class User(object):
                  asset_id,
                  point=None,
                  device=None,
-                 timestamp=datetime.now() + timedelta(hours=6)):
+                 timestamp=datetime.now()):
         self.asset_id = asset_id
         self.point = Point((
             point["coordinates"][0],

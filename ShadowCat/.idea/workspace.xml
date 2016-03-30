@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="32970b7b-26a1-4dfb-aa2c-85db4eb4f8df" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FlaskCat/FlaskCat/__init__.py" afterPath="$PROJECT_DIR$/FlaskCat/FlaskCat/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FlaskCat/FlaskCat/models.py" afterPath="$PROJECT_DIR$/FlaskCat/FlaskCat/models.py" />
     </list>
     <ignored path="ShadowCat.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,11 +37,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="controller.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="controller.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/FlaskCat/FlaskCat/controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+            <state relative-caret-position="289">
+              <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -81,11 +81,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/FlaskCat/FlaskCat/models.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <caret line="0" column="29" selection-start-line="0" selection-start-column="29" selection-end-line="0" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -132,12 +132,12 @@
         <option value="$PROJECT_DIR$/FlaskAPI/FlaskAPI/__init__.py" />
         <option value="$PROJECT_DIR$/FlaskAPI/FlaskAPI/api.py" />
         <option value="$PROJECT_DIR$/FlaskAPI/runserver.py" />
-        <option value="$PROJECT_DIR$/FlaskCat/FlaskCat/models.py" />
         <option value="$PROJECT_DIR$/FlaskCat/config.py" />
         <option value="$PROJECT_DIR$/FlaskCat/validators.py" />
         <option value="$PROJECT_DIR$/FlaskCat/runserver.py" />
         <option value="$PROJECT_DIR$/FlaskCat/FlaskCat/controller.py" />
         <option value="$PROJECT_DIR$/FlaskCat/FlaskCat/__init__.py" />
+        <option value="$PROJECT_DIR$/FlaskCat/FlaskCat/models.py" />
       </list>
     </option>
   </component>
@@ -176,6 +176,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -229,7 +230,6 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -834,14 +834,6 @@
     <entry file="file://$PROJECT_DIR$/FlaskAPI/flaskrun.py" />
     <entry file="file://$PROJECT_DIR$/FlaskAPI/runserver.py" />
     <entry file="file://$PROJECT_DIR$/FlaskCat/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/FlaskCat/FlaskCat/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/FlaskCat/config.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -878,11 +870,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/FlaskCat/FlaskCat/controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        <state relative-caret-position="289">
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FlaskCat/FlaskCat/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="29" selection-start-line="0" selection-start-column="29" selection-end-line="0" selection-end-column="29" />
+          <folding />
         </state>
       </provider>
     </entry>
