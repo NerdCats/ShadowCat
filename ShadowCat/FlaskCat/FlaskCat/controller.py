@@ -29,15 +29,16 @@ def ping_location():
         json_data["point"]
     )
     coll_history.insert_one(data.__dict__)
-
-    user_data = coll_pings.find_one({"asset_id": json_data["asset_id"]})
-    if not user_data:
-        coll_pings.insert_one(data.__dict__)
-    else:
-        coll_pings.update_one({"asset_id": json_data["asset_id"]},
-                              {'$set': {"point": json_data["point"],
-                                        "timestamp": datetime.utcnow() + timedelta(hours=6)}
-                               })
+    coll_pings.update_one(
+        {"asset_id": json_data["asset_id"]},
+        {
+            '$set': {
+                "point": json_data["point"],
+                "timestamp": datetime.utcnow()
+            }
+        },
+        upsert=True
+    )
     return dumps(data.__dict__), 201
 
 
