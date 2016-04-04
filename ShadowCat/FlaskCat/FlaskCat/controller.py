@@ -4,7 +4,7 @@ from validators import validate_input
 
 from flask import request
 from bson.json_util import dumps
-from datetime import datetime, timedelta
+from datetime import datetime
 import pymongo
 
 coll_history = app.config['DB_COLL_HISTORY']
@@ -39,7 +39,7 @@ def ping_location():
         },
         upsert=True
     )
-    return dumps(data.__dict__), 201
+    return (dumps(''), 201, {'Content-Type': 'application/json'})
 
 
 @app.route('/api/location/<asset_id>', methods=['GET'])
