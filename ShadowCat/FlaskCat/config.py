@@ -8,9 +8,12 @@ DEBUG = True
 JSON_AS_ASCII = False
 
 # Database configurations
-DB_HOST = 'taskcatmongo.cloudapp.net'
-DB_PORT = 27017
-DB_CLIENT = MongoClient(DB_HOST, DB_PORT)
+DB_HOST = 'gobdshadowcat.cloudapp.net'
+DB_PORT = '27017'
+DB_USER = ''
+DB_PASS = ''
+DB_CONN_STR = 'mongodb://' + DB_USER + ':' + DB_PASS + '@' + DB_HOST + ':' + DB_PORT
+DB_CLIENT = MongoClient(DB_CONN_STR)
 DB_NAME = 'shadowcat'
 DB_DATABASE = DB_CLIENT[DB_NAME]
 DB_COLL_DEVICES = DB_DATABASE.httpDevices
