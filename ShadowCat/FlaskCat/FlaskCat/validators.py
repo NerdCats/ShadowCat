@@ -1,3 +1,5 @@
+from json import dumps
+
 expected_keys = ('asset_id', 'point')
 point_keys = ('coordinates', 'type')
 
@@ -5,12 +7,15 @@ point_keys = ('coordinates', 'type')
 def validate_input(jason):
     for key in expected_keys:
         if key not in jason:
-            return '"{}" not provided'.format(key)
+            message = '"{}" not provided'.format(key)
+            return dumps(message)
 
     if 'point' in jason:
         for key in point_keys:
             if key not in jason['point']:
-                return '"{}" not present in "point"'.format(key)
+                message = '"{}" not present in "point"'.format(key)
+                return dumps(message)
 
         if len(jason['point']['coordinates']) != 2:
-            return '"coordinates" not conformant to geojson'
+            message = '"coordinates" not conformant to geojson'
+            return dumps(message)

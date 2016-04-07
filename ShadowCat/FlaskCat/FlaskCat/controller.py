@@ -39,14 +39,15 @@ def ping_location():
         },
         upsert=True
     )
-    return (dumps(''), 201, {'Content-Type': 'application/json'})
+    return dumps(''), 201, {'Content-Type': 'application/json'}
 
 
 @app.route('/api/location/<asset_id>', methods=['GET'])
 def get_location(asset_id):
     user_data = coll_pings.find_one({'asset_id': asset_id})
     if not user_data:
-        return 'Not found!', 404
+        message = 'Asset not found!'
+        return dumps(message), 404
     else:
         return dumps(user_data)
 
