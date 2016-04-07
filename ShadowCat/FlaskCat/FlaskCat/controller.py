@@ -14,7 +14,7 @@ coll_pings = app.config['DB_COLL_PINGS']
 @app.route('/')
 @app.route('/api')
 def api_home():
-    return '.:: Welcome to ShadowCat API ::.'
+    return dumps('.:: Welcome to ShadowCat API ::.')
 
 
 @app.route('/api/ping', methods=['POST'])
