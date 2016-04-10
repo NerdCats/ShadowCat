@@ -1,6 +1,6 @@
 from FlaskCat import app
 from models import User
-from validators import validate_input
+import utilities
 
 from flask import request
 from bson.json_util import dumps
@@ -20,7 +20,7 @@ def api_home():
 @app.route('/api/ping', methods=['POST'])
 def ping_location():
     json_data = request.get_json()
-    error = validate_input(json_data)
+    error = utilities.validate_input(json_data)
     if error:
         return error
 
@@ -49,7 +49,8 @@ def get_location(asset_id):
         message = 'Asset not found!'
         return dumps(message), 404
     else:
-        return dumps(user_data)
+        iso_data = utilities.to_isoformat_datetime(user_data)
+        return dumps(iso_data)
 
 
 @app.route('/api/history/<asset_id>', methods=['GET'])
@@ -62,5 +63,6 @@ def get_history(asset_id, document_limit=10):
     ).limit(int(document_limit))
     history = []
     for document in cursor:
-        history.append(document)
+        doc = utilities.to_isoformat_datetime(document)
+        history.append(doc)
     return dumps(history)

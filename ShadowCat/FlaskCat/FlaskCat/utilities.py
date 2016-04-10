@@ -19,3 +19,10 @@ def validate_input(jason):
         if len(jason['point']['coordinates']) != 2:
             message = '"coordinates" not conformant to geojson'
             return dumps(message)
+
+
+def to_isoformat_datetime(document):
+    if 'timestamp' in document:
+        d = document['timestamp']
+        document['timestamp'] = d.isoformat()
+        return document
