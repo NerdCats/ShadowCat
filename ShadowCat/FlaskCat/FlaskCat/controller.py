@@ -6,9 +6,12 @@ from flask import request
 from bson.json_util import dumps
 from datetime import datetime
 import pymongo
+import logging
 
 coll_history = app.config['DB_COLL_HISTORY']
 coll_pings = app.config['DB_COLL_PINGS']
+
+logger = logging.getLogger(__name__)
 
 
 @app.route('/')
@@ -22,29 +25,49 @@ def ping_location():
     json_data = request.get_json()
     error = utilities.validate_input(json_data)
     if error:
+        logger.debug("Inconsistent input: %s", error)
         return error
 
     data = User(
         json_data["asset_id"],
         json_data["point"]
     )
-    coll_history.insert_one(data.__dict__)
-    coll_pings.update_one(
-        {"asset_id": json_data["asset_id"]},
-        {
-            '$set': {
-                "point": json_data["point"],
-                "timestamp": datetime.utcnow()
-            }
-        },
-        upsert=True
-    )
+    try:
+        coll_history.insert_one(data.__dict__)
+        logger.debug("User data: %s", data.__dict__)
+    except pymongo.errors.AutoReconnect as e:
+        logger.error(e.message)
+    except Exception as e:
+        logger.error(e.message)
+
+    try:
+        coll_pings.update_one(
+            {"asset_id": json_data["asset_id"]},
+            {
+                '$set': {
+                    "point": json_data["point"],
+                    "timestamp": datetime.utcnow()
+                }
+            },
+            upsert=True
+        )
+    except pymongo.errors.AutoReconnect as e:
+        logger.error(e.message)
+    except Exception as e:
+        logger.error(e.message)
+
     return dumps(''), 201, {'Content-Type': 'application/json'}
 
 
 @app.route('/api/location/<asset_id>', methods=['GET'])
 def get_location(asset_id):
-    user_data = coll_pings.find_one({'asset_id': asset_id})
+    try:
+        user_data = coll_pings.find_one({'asset_id': asset_id})
+    except pymongo.errors.AutoReconnect as e:
+        logger.error(e.message)
+    except Exception as e:
+        logger.error(e.message)
+
     if not user_data:
         message = 'Asset not found!'
         return dumps(message), 404
@@ -56,11 +79,17 @@ def get_location(asset_id):
 @app.route('/api/history/<asset_id>', methods=['GET'])
 @app.route('/api/history/<asset_id>/<document_limit>', methods=['GET'])
 def get_history(asset_id, document_limit=10):
-    cursor = coll_history.find(
-        {'asset_id': asset_id}
-    ).sort(
-        "timestamp", pymongo.DESCENDING
-    ).limit(int(document_limit))
+    try:
+        cursor = coll_history.find(
+            {'asset_id': asset_id}
+        ).sort(
+            "timestamp", pymongo.DESCENDING
+        ).limit(int(document_limit))
+    except pymongo.errors.AutoReconnect as e:
+        logger.error(e.message)
+    except Exception as e:
+        logger.error(e.message)
+
     history = []
     for document in cursor:
         doc = utilities.to_isoformat_datetime(document)
