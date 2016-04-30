@@ -46,7 +46,7 @@ def ping_location():
             {
                 '$set': {
                     "point": json_data["point"],
-                    "timestamp": datetime.utcnow()
+                    "timestamp": datetime.now()
                 }
             },
             upsert=True
