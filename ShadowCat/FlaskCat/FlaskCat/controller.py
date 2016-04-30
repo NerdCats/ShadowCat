@@ -30,6 +30,7 @@ def ping_location():
 
     data = User(
         json_data["asset_id"],
+        json_data["name"],
         json_data["point"]
     )
     try:
@@ -46,6 +47,7 @@ def ping_location():
             {
                 '$set': {
                     "point": json_data["point"],
+                    "name": json_data["name"],
                     "timestamp": datetime.now()
                 }
             },

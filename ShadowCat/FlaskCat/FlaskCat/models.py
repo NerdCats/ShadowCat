@@ -5,10 +5,12 @@ from geojson import Point
 class User(object):
     def __init__(self,
                  asset_id,
+                 name,
                  point=None,
                  device=None,
                  timestamp=datetime.now()):
         self.asset_id = asset_id
+        self.name = name
         self.point = Point((
             point["coordinates"][0],
             point["coordinates"][1]
