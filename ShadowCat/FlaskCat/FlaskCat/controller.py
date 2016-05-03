@@ -20,45 +20,53 @@ def api_home():
     return dumps('.:: Welcome to ShadowCat API ::.')
 
 
-@app.route('/api/ping', methods=['POST'])
+@app.route('/api/ping', methods=['GET', 'POST'])
 def ping_location():
-    json_data = request.get_json()
-    error = utilities.validate_input(json_data)
-    if error:
-        logger.debug("Inconsistent input: %s", error)
-        return error
+    if request.method == 'POST':
+        json_data = request.get_json()
+        error = utilities.validate_input(json_data)
+        if error:
+            logger.debug("Inconsistent input: %s", error)
+            return error
 
-    data = User(
-        json_data["asset_id"],
-        json_data["name"],
-        json_data["point"]
-    )
-    try:
-        coll_history.insert_one(data.__dict__)
-        logger.debug("User data: %s", data.__dict__)
-    except pymongo.errors.AutoReconnect as e:
-        logger.error(e.message)
-    except Exception as e:
-        logger.error(e.message)
-
-    try:
-        coll_pings.update_one(
-            {"asset_id": json_data["asset_id"]},
-            {
-                '$set': {
-                    "point": json_data["point"],
-                    "name": json_data["name"],
-                    "timestamp": datetime.now()
-                }
-            },
-            upsert=True
+        data = User(
+            json_data["asset_id"],
+            json_data["name"],
+            json_data["point"]
         )
-    except pymongo.errors.AutoReconnect as e:
-        logger.error(e.message)
-    except Exception as e:
-        logger.error(e.message)
+        try:
+            coll_history.insert_one(data.__dict__)
+            logger.debug("User data: %s", data.__dict__)
+        except pymongo.errors.AutoReconnect as e:
+            logger.error(e.message)
+        except Exception as e:
+            logger.error(e.message)
 
-    return dumps(''), 201, {'Content-Type': 'application/json'}
+        try:
+            coll_pings.update_one(
+                {"asset_id": json_data["asset_id"]},
+                {
+                    '$set': {
+                        "point": json_data["point"],
+                        "name": json_data["name"],
+                        "timestamp": datetime.now()
+                    }
+                },
+                upsert=True
+            )
+        except pymongo.errors.AutoReconnect as e:
+            logger.error(e.message)
+        except Exception as e:
+            logger.error(e.message)
+
+        return dumps(''), 201, {'Content-Type': 'application/json'}
+    else:
+        cursor = coll_pings.find()
+        pings = []
+        for dox in cursor:
+            iso_doc = utilities.to_isoformat_datetime(dox)
+            pings.append(iso_doc)
+        return dumps(pings)
 
 
 @app.route('/api/location/<asset_id>', methods=['GET'])
