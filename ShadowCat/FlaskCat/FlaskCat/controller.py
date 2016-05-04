@@ -27,13 +27,20 @@ def ping_location():
         error = utilities.validate_input(json_data)
         if error:
             logger.debug("Inconsistent input: %s", error)
-            return error
+            return error, 422
 
-        data = User(
-            json_data["asset_id"],
-            json_data["name"],
-            json_data["point"]
-        )
+        if 'name' in json_data:
+            data = User(
+                json_data["asset_id"],
+                json_data["name"],
+                json_data["point"]
+            )
+        else:
+            data = User(
+                json_data["asset_id"],
+                "Name not provided",
+                json_data["point"]
+            )
         try:
             coll_history.insert_one(data.__dict__)
             logger.debug("User data: %s", data.__dict__)

@@ -3,7 +3,7 @@ import os
 import json
 import logging.config
 
-expected_keys = ('asset_id', 'point', 'name')
+expected_keys = ('asset_id', 'point')
 point_keys = ('coordinates', 'type')
 
 

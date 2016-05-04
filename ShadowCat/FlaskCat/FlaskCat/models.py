@@ -5,7 +5,7 @@ from geojson import Point
 class User(object):
     def __init__(self,
                  asset_id,
-                 name,
+                 name=None,
                  point=None,
                  device=None,
                  timestamp=datetime.now()):
