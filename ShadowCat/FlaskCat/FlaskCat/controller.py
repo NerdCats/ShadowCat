@@ -1,5 +1,5 @@
 from FlaskCat import app
-from models import User
+from models import User, AssetPayload
 from broadcaster import Broadcaster
 import utilities
 
@@ -51,12 +51,7 @@ def ping_location():
         try:
             coll_history.insert_one(data.__dict__)
             logger.debug("User data: %s", data.__dict__)
-
-            with Session() as session:
-                broadcaster = Broadcaster(bc_url, bc_hub, session)
-                with broadcaster.connection:
-                    broadcaster.broadcast(data.point)
-
+            send_location(data)
         except pymongo.errors.AutoReconnect as e:
             logger.error(e.message)
         except Exception as e:
@@ -87,6 +82,18 @@ def ping_location():
             iso_doc = utilities.to_isoformat_datetime(dox)
             pings.append(iso_doc)
         return dumps(pings)
+
+
+def send_location(data):
+    payload = AssetPayload(
+        data.asset_id,
+        data.point,
+        data.name
+    )
+    with Session() as session:
+        broadcaster = Broadcaster(bc_url, bc_hub, session)
+        with broadcaster.connection:
+            broadcaster.broadcast(payload.__dict__)
 
 
 @app.route('/api/location/<asset_id>', methods=['GET'])

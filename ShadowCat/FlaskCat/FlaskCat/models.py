@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from __builtin__ import object
 from geojson import Point
 
 
@@ -23,3 +25,13 @@ class Device(object):
     def __init__(self, imei, phone_number):
         self.imei = imei
         self.phone_number = phone_number
+
+
+class AssetPayload(object):
+    def __init__(self,
+                 asset_id,
+                 point,
+                 name=None):
+        self.AssetId = asset_id
+        self.Point = point
+        self.Name = name
