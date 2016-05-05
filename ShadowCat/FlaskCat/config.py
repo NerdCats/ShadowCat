@@ -24,3 +24,7 @@ DB_DATABASE = DB_CLIENT[DB_NAME]
 DB_COLL_DEVICES = DB_DATABASE.httpDevices
 DB_COLL_PINGS = DB_DATABASE.pings
 DB_COLL_HISTORY = DB_DATABASE.history
+
+# Broadcaster configurations
+BC_URL = 'http://gofetch.cloudapp.net:1001/signalr'
+BC_HUB = 'ShadowHub'

@@ -1,15 +1,20 @@
 from FlaskCat import app
 from models import User
+from broadcaster import Broadcaster
 import utilities
 
 from flask import request
 from bson.json_util import dumps
 from datetime import datetime
+from requests import Session
 import pymongo
 import logging
 
 coll_history = app.config['DB_COLL_HISTORY']
 coll_pings = app.config['DB_COLL_PINGS']
+
+bc_url = app.config['BC_URL']
+bc_hub = app.config['BC_HUB']
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +25,8 @@ def api_home():
     return dumps('.:: Welcome to ShadowCat API ::.')
 
 
+# Getting bulkier and bulkier...
+# need to do something
 @app.route('/api/ping', methods=['GET', 'POST'])
 def ping_location():
     if request.method == 'POST':
@@ -44,6 +51,12 @@ def ping_location():
         try:
             coll_history.insert_one(data.__dict__)
             logger.debug("User data: %s", data.__dict__)
+
+            with Session() as session:
+                broadcaster = Broadcaster(bc_url, bc_hub, session)
+                with broadcaster.connection:
+                    broadcaster.broadcast(data.point)
+
         except pymongo.errors.AutoReconnect as e:
             logger.error(e.message)
         except Exception as e:
