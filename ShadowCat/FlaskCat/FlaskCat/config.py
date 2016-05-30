@@ -2,9 +2,8 @@ from pymongo import MongoClient
 
 # Server configurations
 DEBUG = True
-# SERVER_NAME doesn't work on localhost
-# SERVER_NAME = '0.0.0.0'
-SERVER_PORT = 1337
+PING_SERVICE_PORT = 1337
+DATA_SERVICE_PORT = 1338
 JSON_AS_ASCII = False
 
 # Database configurations
@@ -24,7 +23,3 @@ DB_DATABASE = DB_CLIENT[DB_NAME]
 DB_COLL_DEVICES = DB_DATABASE.httpDevices
 DB_COLL_PINGS = DB_DATABASE.pings
 DB_COLL_HISTORY = DB_DATABASE.history
-
-# Broadcaster configurations
-BC_URL = 'http://gofetch.cloudapp.net:1001/signalr'
-BC_HUB = 'ShadowHub'
