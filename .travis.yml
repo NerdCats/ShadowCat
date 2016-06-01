@@ -2,8 +2,8 @@ language: python
 python:
     - "2.7"
 env:
-    - FLASK_CAT = ShadowCat/FlaskCat
+    - FLASK_CAT=ShadowCat/FlaskCat
 before_install:
     - cd $FLASK_CAT
 install: pip install -r requirements.txt
-script: echo " "
+script: echo "Null"
