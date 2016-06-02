@@ -3,6 +3,7 @@ from flask.ext.cors import CORS
 from models import User
 from bson.json_util import dumps
 from datetime import datetime
+from servicebus_queue import ServiceBusQueue
 import pymongo
 import utilities
 import logging
@@ -10,6 +11,14 @@ import logging
 app = Flask(__name__)
 CORS(app)
 app.config.from_object('config')
+
+# azure servicebus queue
+svc = ServiceBusQueue(
+    app.config['SVC_BUS_NAMESPACE'],
+    app.config['SVC_BUS_ACCESS_KEY_NAME'],
+    app.config['SVC_BUS_ACCESS_KEY_VALUE'],
+    app.config['QUEUE_NAME']
+)
 
 
 @app.route('/api/ping', methods=['POST'])
@@ -23,6 +32,8 @@ def ping_location():
     data = get_payload(json_data)
     add_ping(data)
     add_history(data)
+    payload = get_azure_payload(data)
+    svc.send(payload)
 
     return dumps(''), 201, {'Content-Type': 'application/json'}
 
@@ -38,6 +49,14 @@ def get_payload(raw_data):
         name,
         raw_data["point"]
     )
+
+
+def get_azure_payload(data):
+    return {
+        'name': data.name,
+        'asset_id': data.asset_id,
+        'location': data.point
+    }
 
 
 def add_ping(data):
