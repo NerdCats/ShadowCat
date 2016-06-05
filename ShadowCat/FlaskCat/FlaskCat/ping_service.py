@@ -1,6 +1,6 @@
 from flask import request, Flask
 from flask.ext.cors import CORS
-from models import User
+from models import User, AssetPayload
 from bson.json_util import dumps
 from datetime import datetime
 from servicebus_queue import ServiceBusQueue
@@ -52,11 +52,11 @@ def get_payload(raw_data):
 
 
 def get_azure_payload(data):
-    return {
-        'name': data.name,
-        'asset_id': data.asset_id,
-        'location': data.point
-    }
+    return AssetPayload(
+        data.asset_id,
+        data.point,
+        data.name
+    )
 
 
 def add_ping(data):

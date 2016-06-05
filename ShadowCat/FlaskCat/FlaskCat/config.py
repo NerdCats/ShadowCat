@@ -31,3 +31,7 @@ SVC_BUS_ACCESS_KEY_VALUE = 'BhSjDnj6xsHC5tmd73qRlZKdHYWdM6RM3YyF028hPH4='
 QUEUE_NAME = 'taskqueue'
 QUEUE_MAX_SIZE = '5120'
 QUEUE_MSG_TTL = 'PT1M'
+
+# SignalR broadcaster configurations
+BC_URL = 'http://gofetch.cloudapp.net:1001/signalr'
+BC_HUB = 'ShadowHub'
