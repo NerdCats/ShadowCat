@@ -4,6 +4,7 @@ from pymongo import MongoClient
 DEBUG = True
 PING_SERVICE_PORT = 1337
 DATA_SERVICE_PORT = 1338
+SUBSCRIPTION_SVC_PORT = 1339
 JSON_AS_ASCII = False
 
 # Database configurations
@@ -25,10 +26,16 @@ DB_COLL_PINGS = DB_DATABASE.pings
 DB_COLL_HISTORY = DB_DATABASE.history
 
 # Azure Service Bus configurations
-SVC_BUS_NAMESPACE = 'pyzure'
-SVC_BUS_ACCESS_KEY_NAME = 'RootManageSharedAccessKey'
-SVC_BUS_ACCESS_KEY_VALUE = 'BhSjDnj6xsHC5tmd73qRlZKdHYWdM6RM3YyF028hPH4='
-QUEUE_NAME = 'taskqueue'
+SVC_BUS_NAMESPACE_BC = 'pyzure'
+SVC_BUS_ACCESS_KEY_NAME_BC = 'RootManageSharedAccessKey'
+SVC_BUS_ACCESS_KEY_VALUE_BC = 'BhSjDnj6xsHC5tmd73qRlZKdHYWdM6RM3YyF028hPH4='
+QUEUE_NAME_BC = 'taskqueue'
+
+SVC_BUS_NAMESPACE_SUB = 'shadowcat-subs'
+SVC_BUS_ACCESS_KEY_NAME_SUB = 'RootManageSharedAccessKey'
+SVC_BUS_ACCESS_KEY_VALUE_SUB = 'm7OPw0JQd1SX1Hje5yrCQ97azW3EZX3YnPmzNYTnw/A='
+QUEUE_NAME_SUB = 'subscriptions'
+
 QUEUE_MAX_SIZE = '5120'
 QUEUE_MSG_TTL = 'PT1M'
 
