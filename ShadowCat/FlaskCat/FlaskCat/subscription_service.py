@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask.ext.cors import CORS
 from broadcaster import Broadcaster
 from bson.json_util import dumps
+from servicebus_queue import ServiceBusQueue
 import utilities
 import logging
 
@@ -9,6 +10,15 @@ app = Flask(__name__)
 CORS(app)
 app.config.from_object('config')
 
+# azure servicebus queue
+svc = ServiceBusQueue(
+    app.config['SVC_BUS_NAMESPACE'],
+    app.config['SVC_BUS_ACCESS_KEY_NAME'],
+    app.config['SVC_BUS_ACCESS_KEY_VALUE'],
+    app.config['QUEUE_NAME']
+)
+
+# the signalr broadcaster
 bcaster = Broadcaster(
     app.config['BC_URL'],
     app.config['BC_HUB']

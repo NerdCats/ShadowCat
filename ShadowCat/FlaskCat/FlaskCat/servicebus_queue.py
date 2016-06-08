@@ -29,5 +29,5 @@ class ServiceBusQueue(object):
 
     def receive(self):
         msg = self.bus_svc.receive_queue_message(self.queue_name, peek_lock=False)
-        data = ast.literal_eval(msg.body)
+        data = ast.literal_eval(str(msg.body))
         return data
