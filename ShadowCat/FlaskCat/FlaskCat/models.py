@@ -35,3 +35,10 @@ class AssetPayload(object):
         self.AssetId = asset_id
         self.Point = point
         self.Name = name
+
+
+class Subscription(object):
+    def __init__(self, asset, subscribers):
+        self.asset = asset
+        self.subscribers = subscribers
+
