@@ -18,7 +18,7 @@ svc = ServiceBusQueue(
 )
 
 
-# payload = sub(asset, subscriber)
+# payload = {asset, subscriber, subscription}
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
     json_data = request.get_json()
