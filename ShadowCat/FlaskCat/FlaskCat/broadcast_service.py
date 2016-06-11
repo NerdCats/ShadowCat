@@ -1,7 +1,6 @@
 from servicebus_queue import ServiceBusQueue
 from broadcaster import Broadcaster
-import pymongo
-import logging
+from pymongo import MongoClient
 
 # need to remove hard coded values
 bc_svc = ServiceBusQueue(
@@ -16,7 +15,17 @@ broadcaster = Broadcaster(
     'ShadowHub'
 )
 
+# Database configurations
+host = 'gofetch.cloudapp.net'
+port = 27017
+client = MongoClient(host, port)
+db = client.shadowcat
+coll_subs = db.subscriptions
+
 while True:
-    # implement with database first
-    # if that seems problematic, move to service bus
-    pass
+    ping = bc_svc.receive()
+    cursor = coll_subs.find()
+    for document in cursor:
+        if document['asset_id'] == ping['asset_id']:
+            # broadcast to buzzCat
+            pass
