@@ -1,5 +1,5 @@
 from flask import request, Flask
-from flask.ext.cors import CORS
+from flask_cors import CORS
 from models import User, AssetPayload
 from bson.json_util import dumps
 from datetime import datetime

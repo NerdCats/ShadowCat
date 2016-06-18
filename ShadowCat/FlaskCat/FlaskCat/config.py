@@ -27,15 +27,11 @@ DB_COLL_HISTORY = DB_DATABASE.history
 DB_COLL_SUBSCRIPTIONS = DB_DATABASE.subscriptions
 
 # Azure Service Bus configurations
-SVC_BUS_NAMESPACE_BC = 'pyzure'
-SVC_BUS_ACCESS_KEY_NAME_BC = 'RootManageSharedAccessKey'
-SVC_BUS_ACCESS_KEY_VALUE_BC = 'BhSjDnj6xsHC5tmd73qRlZKdHYWdM6RM3YyF028hPH4='
-QUEUE_NAME_BC = 'taskqueue'
+SVC_BUS_NAMESPACE = 'gobdmjolinir'
+SVC_BUS_ACCESS_KEY_NAME = 'RootManageSharedAccessKey'
+SVC_BUS_ACCESS_KEY_VALUE = 'W7RPzuTkjuRtajrTpc1rmh0e0fWg3KHNbXxxCHa/lKU='
+QUEUE_NAME = 'shadowcat'
 
-SVC_BUS_NAMESPACE_SUB = 'shadowcat-subs'
-SVC_BUS_ACCESS_KEY_NAME_SUB = 'RootManageSharedAccessKey'
-SVC_BUS_ACCESS_KEY_VALUE_SUB = 'm7OPw0JQd1SX1Hje5yrCQ97azW3EZX3YnPmzNYTnw/A='
-QUEUE_NAME_SUB = 'subscriptions'
 
 QUEUE_MAX_SIZE = '5120'
 QUEUE_MSG_TTL = 'PT1M'
