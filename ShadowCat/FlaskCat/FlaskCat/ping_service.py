@@ -3,21 +3,22 @@ from flask_cors import CORS
 from models import User, AssetPayload
 from bson.json_util import dumps
 from datetime import datetime
-from servicebus_queue import ServiceBusQueue
+from servicebus_topic import ServiceBusTopic
 import pymongo
 import utilities
 import logging
 
 app = Flask(__name__)
 CORS(app)
-app.config.from_object('config')
+app.config.from_object('config_local')
 
 # azure servicebus queue
-svc = ServiceBusQueue(
+svc = ServiceBusTopic(
     app.config['SVC_BUS_NAMESPACE'],
     app.config['SVC_BUS_ACCESS_KEY_NAME'],
     app.config['SVC_BUS_ACCESS_KEY_VALUE'],
-    app.config['QUEUE_NAME']
+    app.config['TOPIC_NAME'],
+    app.config['SUBSCRIPTION_NAME']
 )
 
 

@@ -27,14 +27,12 @@ DB_COLL_HISTORY = DB_DATABASE.history
 DB_COLL_SUBSCRIPTIONS = DB_DATABASE.subscriptions
 
 # Azure Service Bus configurations
-SVC_BUS_NAMESPACE = 'gobdmjolinir'
-SVC_BUS_ACCESS_KEY_NAME = 'RootManageSharedAccessKey'
-SVC_BUS_ACCESS_KEY_VALUE = 'W7RPzuTkjuRtajrTpc1rmh0e0fWg3KHNbXxxCHa/lKU='
-QUEUE_NAME = 'shadowcat'
-
-
-QUEUE_MAX_SIZE = '5120'
-QUEUE_MSG_TTL = 'PT1M'
+SVC_BUS_NAMESPACE = ''
+SVC_BUS_ACCESS_KEY_NAME = ''
+SVC_BUS_ACCESS_KEY_VALUE = ''
+TOPIC_NAME = ''
+TOPIC_MAX_SIZE = '5120'
+TOPIC_MSG_TTL = 'PT1M'
 
 # SignalR broadcaster configurations
 BC_URL = 'http://gofetch.cloudapp.net:1001/signalr'

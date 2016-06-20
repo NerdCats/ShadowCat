@@ -24,8 +24,8 @@ def deploy_trackbot(asset_id, name):
     i = random.randint(0, len(data))
     for location in data[i]['coordinates']:
         point = Point((
-            location[0],
-            location[1]
+            location[1],
+            location[0]
         ))
         print bot.ping_api(asset_id, name, point)
 
@@ -45,7 +45,7 @@ def main():
     for option, argument in opts:
         if option in ('-d', '--dummy'):
             print "starting dummy tracker..."
-            deploy_trackbot('123456', 'Demo')
+            deploy_trackbot('576616956ce2b60e48d2087d', 'Rony')
         elif option in ('-h', '--help'):
             usage()
         else:
