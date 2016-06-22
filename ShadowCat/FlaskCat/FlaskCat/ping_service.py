@@ -34,7 +34,7 @@ def ping_location():
     add_ping(data)
     add_history(data)
     payload = get_azure_payload(data)
-    svc.send(payload)
+    svc.send(payload.__dict__)
 
     return dumps(''), 201, {'Content-Type': 'application/json'}
 
